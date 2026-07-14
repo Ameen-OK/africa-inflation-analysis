@@ -1,4 +1,3 @@
-# africa-inflation-analysis
 
 # Africa Inflation Analysis
 
