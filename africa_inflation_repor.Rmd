@@ -1,0 +1,64 @@
+---
+title: "Inflation & Cost of Living Across African Countries (2015-2025)"
+author: "Kamaldeen Ameen"
+output: html_document
+---
+
+All across history, inflation has been a significant economic pressure across many, if not  all African countries,  and with Africa being the 2nd most populated continent in the world, the effect of inflation affects millions of people. This brings about this project: An analysis of inflation trends from 2015-2025 across eight African countries; Nigeria, Ghana, Kenya, South Africa, Ethiopia, Egypt, Zimbabwe and Senegal, using live data pulled directly from the World Bank API. The goal of this project is to identify which countries face the most severe inflationary pressure and how volatile or stable each country's inflation has been over the past decade, and to predict how the trends will continue if nothing is done to reduce the economic pressure.
+
+Note: Countries were selected to represent geographic diversity across Africa's major regions, along with a range of inflation experiences from relatively stable (Senegal) to extreme (Zimbabwe).
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+all_inflation_recent <- read.csv("data/inflation_africa_2015_2025.csv")
+head(all_inflation_recent)
+```
+
+## Inflation Trends (2015–2025)
+
+From the inflation rate trend, we can observe that Egypt, Ethiopia, Ghana, and Nigeria experienced the highest and most volatile inflation rates, while Kenya, Senegal, and South Africa maintained relatively low and more stable inflation throughout the period
+
+```{r}
+no_zimbabwe_inflation <- filter(all_inflation_recent, countryiso3code != "ZWE")
+
+ggplot(no_zimbabwe_inflation, aes(x = date, y = value, colour = countryiso3code)) +
+  geom_line() +
+  labs(x = "Date", y = "Inflation rate (%)")
+```
+
+## Zimbabwe: A Special Case
+
+From the graph we can observe that Zimbabwe experienced hyperinflation between 2019 and 2020, with 2020 experiencing the highest inflation rate, although the inflation rate has fallen substantially, the trend only shows a partial stabilization, it is also worth noting that the inflation rate data is not available for the years 2023 through 2025
+
+```{r}
+zimbabwe_only <- filter(all_inflation_recent, countryiso3code == "ZWE")
+
+ggplot(zimbabwe_only, aes(x = date, y = value)) +
+  geom_line() + geom_point() +
+  labs(x = "Date", y = "Inflation rate (%)")
+```
+
+## Who Faces the Most Pressure Right Now?
+
+From the graph below, we can observe that Nigeria is currently under the most inflationary pressure, with the inflation rate significantly higher than the other countries, Ghana, Egypt and Ethiopia are also facing considerable inflationary pressure, though its at much lower levels than Nigeria,  and lastly Kenya, South Africa and Senegal appear to have relatively well-controlled inflation, indicating more stable price levels.
+
+```{r}
+latest <- filter(all_inflation_recent, date == 2025)
+
+ggplot(latest, aes(x = reorder(countryiso3code, value), y = value)) +
+  geom_col() +
+  coord_flip() +
+  labs(x = "Country", y = "Inflation rate (%)", title = "2025 Inflation Rate by Country")
+```
+
+## Volatility: Which Countries Are Least Predictable?
+
+The boxplot reveals that Senegal shows both the lowest inflation levels and the least volatility, making it the most stable economy in this comparison. Egypt, Ethiopia, and Ghana show higher and more volatile inflation, with wide swings year to year. Kenya and South Africa sit in a moderate, fairly stable middle ground, while Nigeria shows elevated inflation with meaningful volatility.
+
+```{r}
+ggplot(no_zimbabwe_inflation, aes(x = countryiso3code, y = value)) +
+  geom_boxplot() +
+  labs(x = "Country", y = "Inflation rate (%)", title = "Inflation Volatility by Country (2015-2025)")
+```
