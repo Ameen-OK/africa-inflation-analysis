@@ -457,6 +457,18 @@ shows elevated inflation with meaningful volatility.</p>
 </div>
 <div id="trend-analysis-and-projections" class="section level2">
 <h2>Trend Analysis and Projections</h2>
+<p>The table below shows trend projections using a simple linear model
+for each country. The R² values reveals how reliable these projections
+actually are: Nigeria (0.62) and Ethiopia (0.40) show the strongest
+linear trends, meaning a straight line reasonably captures their
+inflation trajectory, but for the remaining countries, R² values are low
+(0.03–0.22), indicating that inflation moves too irregularly for a
+linear model to meaningfully predict, with this being most obvious with
+Zimbabwe, whose 2028 projection of 485% reflects the model extrapolating
+from a hyperinflation spike rather than a genuine trend. Kenya and South
+Africa’s negative slopes should be read the same way: with R² near zero,
+these are not real declining trends, just noise a straight line happened
+to slope through.</p>
 <pre class="r"><code>trend_results &lt;- read.csv(&quot;data/inflation_trend_predictions.csv&quot;)
 knitr::kable(trend_results, digits = 2, col.names = c(&quot;Country&quot;, &quot;Slope (pts/year)&quot;, &quot;R²&quot;, &quot;Predicted 2028 (%)&quot;))</code></pre>
 <table>
